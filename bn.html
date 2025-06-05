@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Buenas Noches</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(to bottom, #0a0e24, #1a1a3a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .lock-screen {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .content {
+            display: none;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #ffb8b8;
+            text-shadow: 0 0 10px rgba(255, 184, 184, 0.3);
+            font-weight: 300;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(255, 126, 179, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+
+        .message {
+            margin: 25px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 3px solid #ff7eb3;
+            text-align: left;
+            font-weight: 300;
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0;
+            font-size: 24px;
+            color: #ff7eb3;
+            animation: float 4s ease-in infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .error {
+            color: #ff6b6b;
+            margin: 10px 0;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .moon {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: #f8f4e6;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #f8f4e6, 
+                        0 0 60px rgba(248, 244, 230, 0.5);
+            z-index: 0;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 70px;
+            height: 70px;
+            background: #1a1a3a;
+            border-radius: 50%;
+        }
+
+        .goodnight-btn {
+            background: linear-gradient(45deg, #a18cd1, #fbc2eb);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(161, 140, 209, 0.3);
+        }
+
+        .goodnight-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .password-input, .submit-btn, .goodnight-btn {
+                padding: 12px 20px;
+            }
+            
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 7%;
+                right: 7%;
+            }
+            
+            .moon::before {
+                width: 50px;
+                height: 50px;
+                top: 10px;
+                left: 10px;
+            }
+        }
+
+        /* Animación de shake */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="moon"></div>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <div class="lock-screen" id="lockScreen">
+            <h1>Para Mi Princesa</h1>
+            <p>Dime tu nombre para continuar...</p>
+            <input type="text" class="password-input" id="passwordInput" placeholder="¿Quién eres?">
+            <div class="error" id="error">Ese no es tu nombre, Preciosa</div>
+            <button class="submit-btn" id="submitBtn">Entrar</button>
+        </div>
+
+        <div class="content" id="content">
+            <h1>Buenas Noches, <span id="nameDisplay">Princesa</span> 🌙</h1>
+            <div class="message" id="message">
+                <p>Princesa, antes que cierres tus ojos,<br>
+quiero susurrarte lo maravillosa que eres,<br>
+aunque estos días sean duros,<br>
+aquí estamos, a pesar de la distancia,<br>
+tu imagen vive siempre en mi mente.</p>
+
+<p>Tu mirada y tu sonrisa,<br>
+chispa que enciende mi alma,<br>
+en este frío invierno,<br>
+te envío un abrazo cálido,<br>
+mi refugio para tu corazón.</p>
+
+<p>Descansa, hermosa, que mañana,<br>
+será otro día de lucha y esperanza,<br>
+y yo estaré aquí,<br>
+alentándote en cada paso q das.<br></p>
+
+            </div>
+            <button class="goodnight-btn" id="goodnightBtn">💖 Reclame su Besito de Buenas Noches</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crear estrellas
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                starsContainer.appendChild(star);
+            }
+
+            // Elementos del DOM
+            const passwordInput = document.getElementById('passwordInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const lockScreen = document.getElementById('lockScreen');
+            const content = document.getElementById('content');
+            const error = document.getElementById('error');
+            const nameDisplay = document.getElementById('nameDisplay');
+            const goodnightBtn = document.getElementById('goodnightBtn');
+            const heartsContainer = document.getElementById('hearts');
+            const messageDiv = document.getElementById('message');
+
+            // Contraseña válida (personaliza con su nombre)
+            const validPassword = ['Emily', 'emily', 'EMILY', 'Emy', 'emy', 'Emi', 'emi'];
+
+            // Verificar contraseña
+            function checkPassword() {
+                const input = passwordInput.value.trim();
+                
+                if (validPassword.includes(input)) {
+                    // Correcto
+                    lockScreen.style.display = 'none';
+                    content.style.display = 'block';
+                    nameDisplay.textContent = input;
+                    createHearts();
+                } else {
+                    // Incorrecto
+                    passwordInput.value = '';
+                    error.style.display = 'block';
+                    passwordInput.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        passwordInput.style.animation = '';
+                    }, 500);
+                }
+            }
+
+            // Event listeners
+            submitBtn.addEventListener('click', checkPassword);
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkPassword();
+            });
+
+            // Corazones flotantes
+            function createHearts() {
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.classList.add('heart');
+                        heart.innerHTML = ['❤️', '💖', '💗', '💓', '💞', '💕', '💘'][Math.floor(Math.random() * 7)];
+                        heart.style.left = `${Math.random() * 100}%`;
+                        heart.style.bottom = '0';
+                        heart.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                        heart.style.fontSize = `${Math.random() * 10 + 20}px`;
+                        heartsContainer.appendChild(heart);
+                        
+                        setTimeout(() => {
+                            heart.remove();
+                        }, 4000);
+                    }, i * 300);
+                }
+            }
+
+            // Corazones continuos
+            let heartInterval = setInterval(createHearts, 3000);
+
+            // Botón de buenas noches
+            goodnightBtn.addEventListener('click', function() {
+                goodnightBtn.innerHTML = '💋 Beso enviado!';
+
+                // Detener la lluvia normal de corazones temporalmente
+                clearInterval(heartInterval);
+
+                // Explosión de BESOS (emojis de labios)
+        for (let i = 0; i < 25; i++) {
+            setTimeout(() => {
+                const kiss = document.createElement('div');
+                kiss.classList.add('heart');
+                kiss.innerHTML = '💋'; // Emoji de beso
+                kiss.style.left = `${Math.random() * 100}%`;
+                kiss.style.bottom = '20%';
+                kiss.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                kiss.style.fontSize = `${Math.random() * 15 + 15}px`;
+                heartsContainer.appendChild(kiss);
+                
+                setTimeout(() => {
+                    kiss.remove();
+                }, 3000);
+            }, i * 100);
+        }
+        // Volver a la normalidad después de 3 segundos
+        setTimeout(() => {
+            goodnightBtn.innerHTML = '💖 Reclame un Beso de Buenas Noches';
+            // Reanudar la lluvia normal de corazones
+            heartInterval = setInterval(createHearts, 3000);
+        }, 3000);
+
+                setTimeout(() => {
+                    goodnightBtn.innerHTML = '💖 Reclame un Beso de Buenas Noches';
+                }, 1500);
+                
+                // Explosión de corazones
+                for (let i = 0; i < 25; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.classList.add('heart');
+                        heart.innerHTML = ['❤️', '💖', '💗', '💓', '💞', '💕', '💘'][Math.floor(Math.random() * 7)];
+                        heart.style.left = `${Math.random() * 100}%`;
+                        heart.style.bottom = '20%';
+                        heart.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                        heart.style.fontSize = `${Math.random() * 15 + 15}px`;
+                        heartsContainer.appendChild(heart);
+                        
+                        setTimeout(() => {
+                            heart.remove();
+                        }, 3000);
+                    }, i * 100);
+                }
+            });
+
+            // Efecto de escritura para el mensaje (opcional)
+            function typeWriter() {
+                const originalText = messageDiv.innerHTML;
+                messageDiv.innerHTML = '';
+                let i = 0;
+                const speed = 30;
+                
+                function typing() {
+                    if (i < originalText.length) {
+                        messageDiv.innerHTML += originalText.charAt(i);
+                        i++;
+                        setTimeout(typing, speed);
+                    }
+                }
+                
+                setTimeout(typing, 1000);
+            }
+            
+            // Descomenta la siguiente línea si quieres que el mensaje aparezca con efecto de escritura
+            // typeWriter();
+        });
+    </script>
+</body>
+</html>
