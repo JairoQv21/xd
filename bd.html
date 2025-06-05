@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Amanecer Mágico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(to bottom, #FF5F6D, #FFC371);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2c3e50;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            z-index: 20;
+            padding: 20px;
+        }
+
+        .card {
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease-out;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-impact {
+            background: linear-gradient(45deg, #f39c12, #e74c3c);
+            color: white;
+            margin-top: 15px;
+        }
+
+        .message-box {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            border-left: 4px solid #3498db;
+            text-align: left;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Elementos naturales */
+        .sun {
+            position: fixed;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: #f1c40f;
+            border-radius: 50%;
+            box-shadow: 0 0 40px #f39c12;
+            z-index: 1;
+            animation: rise 8s ease-out forwards;
+        }
+
+        @keyframes rise {
+            to {
+                transform: translate(-30px, 30px);
+            }
+        }
+
+        .wave {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" fill="%23ffffff40"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"/></svg>');
+            animation: wave 15s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .bird {
+            position: fixed;
+            font-size: 24px;
+            animation: fly linear infinite;
+            z-index: 3;
+        }
+
+        @keyframes fly {
+            0% { transform: translateX(-50px) translateY(0) scaleX(1); }
+            50% { transform: translateX(calc(50vw - 25px)) translateY(-20px) scaleX(1); }
+            51% { transform: translateX(calc(50vw - 25px)) translateY(-20px) scaleX(-1); }
+            100% { transform: translateX(calc(100vw + 50px)) translateY(0) scaleX(-1); }
+        }
+
+        .sunbeam {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 10%, rgba(255,200,100,0.3), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Efectos especiales */
+        .sun-impact {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200vw;
+            height: 200vh;
+            background: radial-gradient(circle, rgba(255,255,255,0.9), transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 30;
+        }
+
+        .lightning {
+            position: fixed;
+            width: 4px;
+            height: 0;
+            background: linear-gradient(to bottom, white, transparent);
+            box-shadow: 0 0 10px 2px white;
+            opacity: 0;
+            z-index: 25;
+            transform-origin: top center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animaciones */
+        @keyframes impact {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        @keyframes lightning {
+            0% { height: 0; opacity: 0; }
+            10% { height: 50vh; opacity: 1; }
+            90% { height: 80vh; opacity: 1; }
+            100% { height: 100vh; opacity: 0; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* Optimización móvil */
+        @media (max-height: 700px) {
+            .sun {
+                width: 100px;
+                height: 100px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .message-box {
+                padding: 15px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sun"></div>
+    <div class="sunbeam"></div>
+    <div class="wave"></div>
+    <div id="birds-container"></div>
+    <div id="effects-container"></div>
+
+    <div class="container">
+        <div class="card" id="lockScreen">
+            <h1>Buenos Días</h1>
+            <input type="text" class="input-field" id="passwordInput" placeholder="Escribe tu nombre...">
+            <button class="btn btn-primary" id="submitBtn">Comenzar Día</button>
+        </div>
+
+        <div class="card hidden" id="content">
+            <h1>Buenos Días, <span id="nameDisplay">Amor</span> ☀️</h1>
+            <div class="message-box" id="message">
+                <p>Buenos días, princesa,</p> <p>que el sol te despierte suavecito,</p> <p>y un buen desayuno te llene de fuerza.</p> <p>Abrígate bien, que afuera hace frío,</p> <p>pero tú llevas fuego en el alma.</p> <p>Hoy el aula se llena de suerte,</p> <p>porque la mejor maestra ya va en camino.</p> <p>Pronto te veré… y mientras tanto,</p> <p>te mando un abrazo que dure todo el día.</p> 
+            </div>
+            <button class="btn btn-impact" id="impactBtn">☀️ ACTIVAR RAYOS SOLARES</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crear pájaros
+            const birdsContainer = document.getElementById('birds-container');
+            const birdEmojis = ['🐦', '🕊️', '🐤', '🦅', '🦉'];
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const bird = document.createElement('div');
+                    bird.className = 'bird';
+                    bird.textContent = birdEmojis[Math.floor(Math.random() * birdEmojis.length)];
+                    bird.style.top = `${Math.random() * 30 + 10}%`;
+                    bird.style.animationDuration = `${Math.random() * 15 + 10}s`;
+                    bird.style.fontSize = `${Math.random() * 10 + 20}px`;
+                    birdsContainer.appendChild(bird);
+                }, i * 2000);
+            }
+
+            // Elementos del DOM
+            const passwordInput = document.getElementById('passwordInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const lockScreen = document.getElementById('lockScreen');
+            const content = document.getElementById('content');
+            const nameDisplay = document.getElementById('nameDisplay');
+            const impactBtn = document.getElementById('impactBtn');
+            const effectsContainer = document.getElementById('effects-container');
+
+            // Contraseña válida
+            const validPassword = ['Emily', 'emily', 'EMILY', 'emi', 'Emi'];
+
+            // Verificar contraseña
+            submitBtn.addEventListener('click', function() {
+                const input = passwordInput.value.trim();
+                
+                if (validPassword.includes(input)) {
+                    lockScreen.style.animation = 'fadeOut 0.5s forwards';
+                    setTimeout(() => {
+                        lockScreen.classList.add('hidden');
+                        content.classList.remove('hidden');
+                        content.style.animation = 'fadeIn 0.5s forwards';
+                        nameDisplay.textContent = input;
+                    }, 500);
+                } else {
+                    passwordInput.value = '';
+                    passwordInput.placeholder = '¡Ups! Intenta de nuevo';
+                    passwordInput.style.animation = 'shake 0.5s';
+                }
+            });
+
+            // Efecto de rayos solares impactantes
+            impactBtn.addEventListener('click', function() {
+                // Cambiar texto del botón temporalmente
+                impactBtn.textContent = '⚡ RAYOS ACTIVADOS!';
+                
+                // 1. Efecto de destello central
+                const sunImpact = document.createElement('div');
+                sunImpact.className = 'sun-impact';
+                sunImpact.style.animation = 'impact 1s ease-out forwards';
+                effectsContainer.appendChild(sunImpact);
+                
+                // 2. Crear múltiples rayos de luz
+                for (let i = 0; i < 16; i++) {
+                    const lightning = document.createElement('div');
+                    lightning.className = 'lightning';
+                    lightning.style.left = `${Math.random() * 100}%`;
+                    lightning.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                    lightning.style.animation = `lightning ${Math.random() * 0.5 + 0.5}s ease-out forwards`;
+                    lightning.style.animationDelay = `${Math.random() * 0.3}s`;
+                    effectsContainer.appendChild(lightning);
+                    
+                    setTimeout(() => {
+                        lightning.remove();
+                    }, 1000);
+                }
+                
+                // 3. Efecto de vibración en la pantalla
+                document.body.style.animation = 'shake 0.8s';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 800);
+                
+                // 4. Hacer que los pájaros vuelen más rápido durante el efecto
+                const birds = document.querySelectorAll('.bird');
+                birds.forEach(bird => {
+                    const currentDuration = parseFloat(getComputedStyle(bird).animationDuration);
+                    bird.style.animationDuration = `${currentDuration * 0.3}s`;
+                    setTimeout(() => {
+                        bird.style.animationDuration = `${currentDuration}s`;
+                    }, 2000);
+                });
+                
+                // 5. Restaurar botón después de 2 segundos
+                setTimeout(() => {
+                    impactBtn.textContent = '☀️ ACTIVAR RAYOS SOLARES';
+                    sunImpact.remove();
+                }, 2000);
+            });
+
+            // Permitir enviar con Enter
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') submitBtn.click();
+            });
+        });
+    </script>
+</body>
+</html>
