@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Buenas Noches</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, #0a0e24, #1a1a3a);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            touch-action: manipulation;
+            transition: all 1s ease;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            z-index: 20;
+            transition: all 1s ease;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 1s ease;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            font-size: 2rem;
+            color: #f5d7e3;
+            text-shadow: 0 0 10px rgba(245, 215, 227, 0.5);
+            transition: all 1s ease;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: all 1s ease;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        .btn-magic {
+            background: linear-gradient(45deg, #ff4e50, #f9d423);
+            color: white;
+        }
+
+        .message-box {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            border-left: 4px solid #6a11cb;
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            transition: all 1s ease;
+        }
+
+        /* Elementos de la noche */
+        .moon {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: #f5f3ce;
+            border-radius: 50%;
+            box-shadow: 0 0 30px #f5f3ce;
+            z-index: 1;
+            transition: all 1s ease;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 60px;
+            height: 60px;
+            background: #1a1a3a;
+            border-radius: 50%;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            transition: all 1s ease;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Personajes */
+        .characters {
+            position: fixed;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            transition: all 1s ease;
+        }
+
+        .stitch {
+            position: relative;
+            height: 120px;
+            transition: all 0.3s;
+        }
+
+        .stitch {
+            height: 100px;
+            z-index: 7;
+        }
+
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes dance {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Efectos mágicos */
+        .magic-dust {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #f9d423;
+            opacity: 0;
+            z-index: 10;
+            animation: magic 2s ease-out forwards;
+        }
+
+        @keyframes magic {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+        }
+
+        /* Modo mágico (sin texto) */
+        .magic-mode {
+            background: #0a0a1a !important;
+        }
+        
+        .magic-mode .container,
+        .magic-mode .card,
+        .magic-mode h1,
+        .magic-mode .input-field,
+        .magic-mode .message-box {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .magic-mode .moon {
+            transform: scale(1.5);
+            box-shadow: 0 0 60px #f5f3ce;
+        }
+        
+        .magic-mode .characters {
+            transform: scale(1.5);
+            bottom: 25%;
+        }
+        
+        .magic-mode .stars {
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 5%;
+                right: 5%;
+            }
+            
+            .moon::before {
+                width: 40px;
+                height: 40px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            .characters {
+                height: 120px;
+                bottom: 5%;
+            }
+            
+            .lilo {
+                height: 100px;
+            }
+            
+            .stitch {
+                height: 80px;
+            }
+            
+            .magic-mode .characters {
+                transform: scale(1.8);
+                bottom: 30%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="moon"></div>
+    <div class="stars" id="stars"></div>
+    
+    <div class="characters">
+        <img src="qwqw.png" class="stitch" id="stitch" alt="Stitch">
+    </div>
+
+    <div class="container">
+        <div class="card" id="lockScreen">
+            <h1>Buenas Noches Bella</h1>
+            <input type="text" class="input-field" id="passwordInput" placeholder="¿Quién está listo para dormir?">
+            <button class="btn btn-primary" id="submitBtn">Entrar</button>
+        </div>
+
+        <div class="card hidden" id="content">
+            <h1>Buenas Noches, <span id="nameDisplay"></span> 🌙</h1>
+            <div class="message-box" id="message">
+                Duerme tranquila, mi bella princesa,
+                que la noche te abrace suave,
+                y tus sueños sean de luz y risa.
+
+                Preciosa mía, cierra los ojos,
+                que el cielo cuide tu descanso,
+                y el viento te cante despacito.
+
+                Mañana el sol te dará mi beso,
+                pero esta noche, desde lejos,
+                te pienso con todo mi cariño.
+            </div>
+            <button class="btn btn-magic" id="magicBtn">✨ Polvo Mágico de Stitch</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Crear estrellas
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                starsContainer.appendChild(star);
+            }
+
+            // Elementos del DOM
+            const passwordInput = document.getElementById('passwordInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const lockScreen = document.getElementById('lockScreen');
+            const content = document.getElementById('content');
+            const nameDisplay = document.getElementById('nameDisplay');
+            const magicBtn = document.getElementById('magicBtn');
+            const lilo = document.getElementById('lilo');
+            const stitch = document.getElementById('stitch');
+            const body = document.body;
+
+            // Contraseña válida
+            const validPassword = ['Emily', 'emily', 'EMILY', 'emi', 'Emi', 'EMI'];
+
+            // Animaciones iniciales de los personajes
+            function animateCharacters() {
+                lilo.style.animation = 'float 3s ease-in-out infinite';
+                stitch.style.animation = 'float 3s ease-in-out infinite 0.5s, dance 2s ease-in-out infinite';
+            }
+
+            // Verificar contraseña
+            submitBtn.addEventListener('click', function() {
+                const input = passwordInput.value.trim();
+                
+                if (validPassword.includes(input)) {
+                    lockScreen.style.animation = 'fadeOut 0.5s forwards';
+                    setTimeout(() => {
+                        lockScreen.classList.add('hidden');
+                        content.classList.remove('hidden');
+                        content.style.animation = 'fadeIn 0.5s forwards';
+                        nameDisplay.textContent = input;
+                        animateCharacters();
+                    }, 500);
+                } else {
+                    passwordInput.value = '';
+                    passwordInput.placeholder = '¡No eres mi chica!';
+                    passwordInput.style.animation = 'shake 0.5s';
+                }
+            });
+
+            // Efecto de polvo mágico
+            magicBtn.addEventListener('click', function() {
+                // Activar modo mágico
+                body.classList.add('magic-mode');
+                magicBtn.style.display = 'none';
+                
+                // Hacer que Stitch baile más
+                stitch.style.animation = 'dance 0.5s ease-in-out infinite';
+                
+                // Crear polvo mágico
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const dust = document.createElement('div');
+                        dust.className = 'magic-dust';
+                        dust.style.left = `${Math.random() * 80 + 10}%`;
+                        dust.style.bottom = '30%';
+                        dust.style.setProperty('--tx', `${Math.random() * 100 - 50}px`);
+                        dust.style.setProperty('--ty', `${Math.random() * -100 - 50}px`);
+                        dust.style.width = `${Math.random() * 15 + 5}px`;
+                        dust.style.height = dust.style.width;
+                        dust.style.animationDuration = `${Math.random() * 1 + 1}s`;
+                        document.body.appendChild(dust);
+                        
+                        setTimeout(() => {
+                            dust.remove();
+                        }, 2000);
+                    }, i * 50);
+                }
+                
+                // Botón para volver
+                setTimeout(() => {
+                    const returnBtn = document.createElement('button');
+                    returnBtn.className = 'btn btn-primary';
+                    returnBtn.textContent = 'Volver al Mensaje';
+                    returnBtn.style.position = 'fixed';
+                    returnBtn.style.bottom = '20px';
+                    returnBtn.style.left = '50%';
+                    returnBtn.style.transform = 'translateX(-50%)';
+                    returnBtn.style.zIndex = '100';
+                    returnBtn.onclick = function() {
+                        body.classList.remove('magic-mode');
+                        magicBtn.style.display = 'block';
+                        returnBtn.remove();
+                        stitch.style.animation = 'float 3s ease-in-out infinite 0.5s, dance 2s ease-in-out infinite';
+                    };
+                    document.body.appendChild(returnBtn);
+                }, 1000);
+            });
+
+            // Permitir enviar con Enter
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') submitBtn.click();
+            });
+
+            // Agregar animaciones CSS dinámicamente
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes fadeOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(-20px); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
