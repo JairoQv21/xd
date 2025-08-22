@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz 2 Meses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a2e 50%, #16213e 100%);
+            color: #f1f1f1;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.2);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Elementos decorativos */
+        .moon {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f9d71c 0%, #f5e8a5 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px #f9d71c;
+            z-index: 0;
+        }
+        
+        .moon::after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            background: rgba(188, 163, 33, 0.4);
+            border-radius: 50%;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .star:nth-child(1) {
+            top: 30%;
+            left: 10%;
+            width: 3px;
+            height: 3px;
+            animation: twinkle 4s infinite;
+        }
+        
+        .star:nth-child(2) {
+            top: 15%;
+            left: 25%;
+            width: 2px;
+            height: 2px;
+            animation: twinkle 3s infinite 1s;
+        }
+        
+        .star:nth-child(3) {
+            top: 25%;
+            right: 20%;
+            width: 4px;
+            height: 4px;
+            animation: twinkle 5s infinite 0.5s;
+        }
+        
+        .star:nth-child(4) {
+            bottom: 20%;
+            left: 20%;
+            width: 2px;
+            height: 2px;
+            animation: twinkle 3.5s infinite 0.7s;
+        }
+        
+        .star:nth-child(5) {
+            bottom: 30%;
+            right: 15%;
+            width: 3px;
+            height: 3px;
+            animation: twinkle 4.5s infinite 1.2s;
+        }
+        
+        .heart {
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        
+        .heart:nth-child(6) {
+            top: 20%;
+            left: 15%;
+            animation: float 6s infinite;
+        }
+        
+        .heart:nth-child(7) {
+            bottom: 25%;
+            right: 10%;
+            animation: float 7s infinite 1s;
+        }
+        
+        .heart:nth-child(8) {
+            top: 40%;
+            right: 25%;
+            animation: float 5s infinite 0.5s;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff6b6b 0%, #ff8e8e 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a5b1c2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .photos-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .photo-frame {
+            width: 300px;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .photo-frame:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.25);
+            border-color: rgba(255, 107, 107, 0.6);
+        }
+        
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2c2c54 0%, #40407a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #a5b1c2;
+        }
+        
+        .photo-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+        
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .message-section {
+            background: rgba(36, 36, 62, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 4px solid #ff6b6b;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .message-section p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .message-section p:last-child {
+            text-align: right;
+            font-style: italic;
+            color: #ff8e8e;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .time-unit {
+            background: rgba(255, 107, 107, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 80px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .label {
+            font-size: 0.9rem;
+            color: #a5b1c2;
+            margin-top: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #a5b1c2;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hearts {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .hearts i {
+            color: #ff6b6b;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .hearts i:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        .hearts i:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        
+        /* Animaciones */
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            
+            .photos-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .photo-frame {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+            }
+            
+            .moon {
+                width: 60px;
+                height: 60px;
+                top: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .photo-frame {
+                height: 250px;
+            }
+            
+            .time-unit {
+                min-width: 60px;
+                padding: 15px 10px;
+            }
+            
+            .number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="moon"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="heart"><i class="fas fa-heart"></i></div>
+        <div class="heart"><i class="fas fa-heart"></i></div>
+        <div class="heart"><i class="fas fa-heart"></i></div>
+        
+        <header>
+            <h1>Feliz 2 Meses</h1>
+            <p class="subtitle">Cada día a tu lado es un regalo que atesoro con todo mi corazón</p>
+        </header>
+        
+        <div class="photos-container">
+            <div class="photo-frame">
+                <img src="img3.jpg" alt="Nuestra primera cita" style="width:100%;height:100%;object-fit:cover;">
+                <div class="photo-caption">Elegantes</div>
+            </div>
+            
+            <div class="photo-frame">
+                <img src="img2.jpg" alt="Nuestra primera cita" style="width:100%;height:100%;object-fit:cover;">
+                <div class="photo-caption">Juntos y felices</div>
+            </div>
+        </div>
+        
+        <div class="message-section">
+            <p>Mi amor,</p>
+            <p>Estos dos meses a tu lado han sido los más maravillosos. Desde el primer momento supe que había algo especial en ti.
+            <p>Tu sonrisa ilumina mis días, tu amor llena mi corazón de alegría y tu compañía hace que cada momento sea único. No hay nada que me haga más feliz que verte sonreír y saber que soy yo quien pone esa sonrisa en tu rostro.</p>
+            <p>Espero que esta sea una de muchas celebraciones juntos. Te quiero más de lo que las palabras pueden expresar.</p>
+            <p>Tu novio</p>
+        </div>
+        
+        <div class="countdown">
+            <div class="time-unit">
+                <div class="number" id="days">60</div>
+                <div class="label">Días</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="hours">00</div>
+                <div class="label">Horas</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="minutes">00</div>
+                <div class="label">Minutos</div>
+            </div>
+            <div class="time-unit">
+                <div class="number" id="seconds">00</div>
+                <div class="label">Segundos</div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="hearts">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
+            </div>
+            <p>Hecho con ❤️ para la chica más especial.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Actualizar el contador en tiempo real
+        function updateCountdown() {
+            // Suponiendo que comenzaron hace 2 meses (60 días)
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 60);
+            
+            const now = new Date();
+            const diffTime = Math.abs(now - startDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = diffDays;
+            document.getElementById('hours').textContent = diffHours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = diffMinutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = diffSeconds.toString().padStart(2, '0');
+        }
+        
+        // Actualizar cada segundo
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Llamada inicial
+        
+        // Efecto de escritura para el mensaje
+        const messageParagraphs = document.querySelectorAll('.message-section p');
+        const originalTexts = [
+            "Mi amor,",
+            "Estos dos meses a tu lado han sido los más maravillosos. Desde el primer momento supe que había algo especial en ti.",
+            "Tu sonrisa ilumina mis días, tu amor llena mi corazón de alegría y tu compañía hace que cada momento sea único. No hay nada que me haga más feliz que verte sonreír y saber que soy yo quien pone esa sonrisa en tu rostro.",
+            "Espero que esta sea solo una de muchas celebraciones juntos. Te quiero más de lo que las palabras pueden expresar.",
+            "Tu novio"
+        ];
+        
+        // Inicializar los párrafos vacíos
+        messageParagraphs.forEach((p, index) => {
+            p.style.opacity = "0";
+            p.textContent = "";
+        });
+        
+        // Función para efecto de escritura
+        function typeWriter() {
+            messageParagraphs.forEach((p, pIndex) => {
+                setTimeout(() => {
+                    p.style.opacity = "1";
+                    let i = 0;
+                    const text = originalTexts[pIndex];
+                    const speed = 40; // Velocidad de escritura
+                    
+                    function type() {
+                        if (i < text.length) {
+                            p.textContent += text.charAt(i);
+                            i++;
+                            setTimeout(type, speed);
+                        }
+                    }
+                    
+                    type();
+                }, 800 * pIndex);
+            });
+        }
+        
+        // Iniciar la animación después de que cargue la página
+        window.onload = function() {
+            setTimeout(typeWriter, 1000);
+        };
+    </script>
+</body>
+</html>
