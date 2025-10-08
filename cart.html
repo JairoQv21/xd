@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta para mi Amor</title>
+    <title>Carta</title>
     <style>
         * {
             margin: 0;
@@ -21,6 +21,7 @@
             align-items: center;
             padding: 15px;
             overflow-x: hidden;
+            touch-action: manipulation;
         }
 
         .container {
@@ -29,6 +30,7 @@
             width: 100%;
             max-width: 350px;
             margin-bottom: 20px;
+            z-index: 10;
         }
 
         .envelope {
@@ -37,10 +39,11 @@
             height: 220px;
             cursor: pointer;
             transition: transform 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .envelope:hover {
-            transform: scale(1.02);
+        .envelope:active {
+            transform: scale(0.98);
         }
 
         .envelope-front {
@@ -67,16 +70,7 @@
             background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.3) 50%, transparent 55%);
         }
 
-        /* Corazón POSICIONADO FUERA del sobre */
-        .heart-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            pointer-events: none;
-        }
-
+        /* Corazón DENTRO del sobre frontal */
         .heart {
             width: 45px;
             height: 45px;
@@ -84,6 +78,7 @@
             transform: rotate(45deg);
             animation: heartbeat 1.5s infinite;
             position: relative;
+            z-index: 3;
         }
 
         .heart::before,
@@ -167,7 +162,7 @@
             font-size: 14px;
         }
 
-        /* CONTENEDOR DE CORAZONES FLOTANTES MEJORADO */
+        /* CONTENEDOR DE CORAZONES FLOTANTES */
         .global-hearts-container {
             position: fixed;
             top: 0;
@@ -185,6 +180,7 @@
             opacity: 0;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             animation: float 3s ease-in forwards;
+            pointer-events: none;
         }
 
         /* Estados cuando la carta está abierta */
@@ -194,7 +190,7 @@
 
         .open .letter {
             transform: translateY(200px);
-            height: 280px; /* Altura aumentada cuando está abierta */
+            height: 320px;
         }
 
         .open .letter-content {
@@ -230,6 +226,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: -1;
         }
 
         .decoration .circle {
@@ -259,6 +256,8 @@
             font-size: 16px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             padding: 0 10px;
+            z-index: 10;
+            position: relative;
         }
 
         .footer {
@@ -268,6 +267,8 @@
             font-size: 12px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             padding: 0 10px;
+            z-index: 10;
+            position: relative;
         }
 
         /* Media queries para mejor adaptación */
@@ -287,7 +288,7 @@
             
             .open .letter {
                 transform: translateY(180px);
-                height: 280px; /* Altura ajustada para pantallas pequeñas */
+                height: 280px;
             }
             
             .letter h2 {
@@ -315,7 +316,7 @@
             
             .open .letter {
                 transform: translateY(230px);
-                height: 380px; /* Altura mayor para tablets */
+                height: 380px;
             }
             
             .letter h2 {
@@ -361,14 +362,10 @@
             <div class="circle"></div>
         </div>
         
-        <!-- Corazón POSICIONADO FUERA del sobre -->
-        <div class="heart-container">
-            <div class="heart"></div>
-        </div>
-        
         <div class="envelope" id="envelope">
             <div class="envelope-front">
-                <!-- Ya no necesitamos el contenedor de corazones aquí -->
+                <!-- Corazón DENTRO del sobre frontal -->
+                <div class="heart"></div>
             </div>
             <div class="flap"></div>
             <div class="letter">
@@ -378,7 +375,7 @@
             </div>
         </div>
         
-        <div class="instructions">Toca la carta para abrirla</div>
+        <div class="instructions">Manten tocando la carta para abrirla</div>
     </div>
 
     <div class="footer">Hecho con ❤️ para ti</div>
@@ -401,7 +398,8 @@
             
             let isFirstOpen = true;
             
-            envelope.addEventListener('click', function() {
+            // Evento de click mejorado para móviles
+            function handleEnvelopeClick() {
                 container.classList.toggle('open');
                 
                 if (container.classList.contains('open')) {
@@ -423,7 +421,14 @@
                     // Restaurar instrucción
                     document.querySelector('.instructions').textContent = 'Toca la carta para abrirla';
                 }
-            });
+            }
+            
+            // Agregar eventos para ambos click y touch
+            envelope.addEventListener('click', handleEnvelopeClick);
+            envelope.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevenir scroll
+                handleEnvelopeClick();
+            }, { passive: false });
             
             function createHearts() {
                 // Limpiar corazones anteriores
@@ -440,7 +445,7 @@
                     // Posición aleatoria en toda la pantalla
                     const left = Math.random() * 100;
                     const delay = Math.random() * 2;
-                    const duration = 2 + Math.random() * 2; // 2-4 segundos
+                    const duration = 2 + Math.random() * 2;
                     
                     heart.style.left = `${left}%`;
                     heart.style.animation = `float ${duration}s ease-in ${delay}s forwards`;
@@ -501,11 +506,6 @@
                     letterContent.appendChild(element);
                 });
             }
-
-            // Optimización para touch devices
-            envelope.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-            });
         });
     </script>
 </body>
