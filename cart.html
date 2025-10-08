@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta para mi Amor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            perspective: 800px;
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            margin-bottom: 20px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope:hover {
+            transform: scale(1.02);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #e63946;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .envelope-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.3) 50%, transparent 55%);
+        }
+
+        /* Corazón POSICIONADO FUERA del sobre */
+        .heart-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .heart {
+            width: 45px;
+            height: 45px;
+            background: #ff9ebb;
+            transform: rotate(45deg);
+            animation: heartbeat 1.5s infinite;
+            position: relative;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: #ff9ebb;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -22px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: -22px;
+        }
+
+        .flap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #d62828;
+            border-radius: 8px;
+            transform-origin: top;
+            transition: transform 0.8s ease-in-out;
+            z-index: 3;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            clip-path: polygon(0 0, 100% 0, 50% 50%);
+        }
+
+        .letter {
+            position: absolute;
+            width: 95%;
+            height: 200px;
+            background: #fff;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            top: 8px;
+            left: 2.5%;
+            transition: all 0.8s ease-in-out 0.3s;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .letter-content {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out 1s;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .letter h2 {
+            color: #e63946;
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .letter p {
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .signature {
+            margin-top: 15px;
+            font-style: italic;
+            color: #e63946;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* CONTENEDOR DE CORAZONES FLOTANTES MEJORADO */
+        .global-hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 24px;
+            color: #e63946;
+            opacity: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in forwards;
+        }
+
+        /* Estados cuando la carta está abierta */
+        .open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .open .letter {
+            transform: translateY(200px);
+            height: 280px; /* Altura aumentada cuando está abierta */
+        }
+
+        .open .letter-content {
+            opacity: 1;
+        }
+
+        /* Animaciones */
+        @keyframes heartbeat {
+            0% { transform: rotate(45deg) scale(1); }
+            25% { transform: rotate(45deg) scale(1.1); }
+            50% { transform: rotate(45deg) scale(1); }
+            75% { transform: rotate(45deg) scale(1.1); }
+            100% { transform: rotate(45deg) scale(1); }
+        }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) rotate(0deg); 
+                opacity: 1; 
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+
+        /* Decoraciones adicionales */
+        .decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .decoration .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .circle:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: -20px;
+            left: -20px;
+        }
+
+        .circle:nth-child(2) {
+            width: 45px;
+            height: 45px;
+            bottom: -15px;
+            right: -15px;
+        }
+
+        .instructions {
+            text-align: center;
+            margin-top: 15px;
+            color: #fff;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            padding: 0 10px;
+        }
+
+        .footer {
+            margin-top: 15px;
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            padding: 0 10px;
+        }
+
+        /* Media queries para mejor adaptación */
+        @media (max-width: 360px) {
+            .container {
+                max-width: 300px;
+            }
+            
+            .envelope {
+                height: 200px;
+            }
+            
+            .letter {
+                height: 180px;
+                padding: 12px;
+            }
+            
+            .open .letter {
+                transform: translateY(180px);
+                height: 280px; /* Altura ajustada para pantallas pequeñas */
+            }
+            
+            .letter h2 {
+                font-size: 18px;
+            }
+            
+            .letter p {
+                font-size: 13px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 400px;
+            }
+            
+            .envelope {
+                height: 250px;
+            }
+            
+            .letter {
+                height: 230px;
+                padding: 20px;
+            }
+            
+            .open .letter {
+                transform: translateY(230px);
+                height: 280px; /* Altura mayor para tablets */
+            }
+            
+            .letter h2 {
+                font-size: 22px;
+            }
+            
+            .letter p {
+                font-size: 15px;
+            }
+            
+            .heart {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .heart::before,
+            .heart::after {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .heart::before {
+                top: -25px;
+            }
+            
+            .heart::after {
+                left: -25px;
+            }
+
+            .floating-heart {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- CONTENEDOR GLOBAL PARA CORAZONES FLOTANTES -->
+    <div class="global-hearts-container" id="global-hearts-container"></div>
+    
+    <div class="container" id="container">
+        <div class="decoration">
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        
+        <!-- Corazón POSICIONADO FUERA del sobre -->
+        <div class="heart-container">
+            <div class="heart"></div>
+        </div>
+        
+        <div class="envelope" id="envelope">
+            <div class="envelope-front">
+                <!-- Ya no necesitamos el contenedor de corazones aquí -->
+            </div>
+            <div class="flap"></div>
+            <div class="letter">
+                <div class="letter-content" id="letter-content">
+                    <!-- El contenido se generará dinámicamente -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">Toca la carta para abrirla</div>
+    </div>
+
+    <div class="footer">Hecho con ❤️ para ti</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelope = document.getElementById('envelope');
+            const container = document.getElementById('container');
+            const globalHeartsContainer = document.getElementById('global-hearts-container');
+            const letterContent = document.getElementById('letter-content');
+            
+            // Contenido de la carta optimizado para móviles
+            const messageParts = [
+                { type: 'h2', text: 'Para mi Amor' },
+                { type: 'p', text: 'Desde que llegaste a mi vida, todo tiene más color, más sentido y más magia.' },
+                { type: 'p', text: 'Cada momento a tu lado es un tesoro que guardo en mi corazón, y cada día me doy cuenta de lo afortunado que soy por tenerte.' },
+                { type: 'p', text: 'Eres la razón por la que mis días son más felices y mis noches están llenas de sueños bonitos.' },
+                { type: 'p', text: 'Con todo mi amor, Jairo.', class: 'signature' }
+            ];
+            
+            let isFirstOpen = true;
+            
+            envelope.addEventListener('click', function() {
+                container.classList.toggle('open');
+                
+                if (container.classList.contains('open')) {
+                    // Crear corazones flotantes al abrir la carta
+                    createHearts();
+                    
+                    // Cambiar instrucción
+                    document.querySelector('.instructions').textContent = '¡Toca de nuevo para cerrar!';
+                    
+                    // Mostrar mensaje con efecto de escritura solo la primera vez
+                    if (isFirstOpen) {
+                        showMessageWithTypewriter();
+                        isFirstOpen = false;
+                    } else {
+                        // Si no es la primera vez, simplemente mostrar el contenido
+                        displayFullMessage();
+                    }
+                } else {
+                    // Restaurar instrucción
+                    document.querySelector('.instructions').textContent = 'Toca la carta para abrirla';
+                }
+            });
+            
+            function createHearts() {
+                // Limpiar corazones anteriores
+                globalHeartsContainer.innerHTML = '';
+                
+                // Crear corazones (menos en móviles para mejor rendimiento)
+                const heartCount = window.innerWidth < 768 ? 12 : 18;
+                
+                for (let i = 0; i < heartCount; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('floating-heart');
+                    heart.innerHTML = '❤';
+                    
+                    // Posición aleatoria en toda la pantalla
+                    const left = Math.random() * 100;
+                    const delay = Math.random() * 2;
+                    const duration = 2 + Math.random() * 2; // 2-4 segundos
+                    
+                    heart.style.left = `${left}%`;
+                    heart.style.animation = `float ${duration}s ease-in ${delay}s forwards`;
+                    
+                    // Tamaño aleatorio para variedad
+                    const size = 20 + Math.random() * 15;
+                    heart.style.fontSize = `${size}px`;
+                    
+                    globalHeartsContainer.appendChild(heart);
+                }
+            }
+            
+            function showMessageWithTypewriter() {
+                letterContent.innerHTML = '';
+                let currentPartIndex = 0;
+                let currentCharIndex = 0;
+                
+                function typeNextChar() {
+                    if (currentPartIndex < messageParts.length) {
+                        const currentPart = messageParts[currentPartIndex];
+                        
+                        // Crear elemento si es necesario
+                        if (currentCharIndex === 0) {
+                            const element = document.createElement(currentPart.type);
+                            if (currentPart.class) {
+                                element.classList.add(currentPart.class);
+                            }
+                            letterContent.appendChild(element);
+                        }
+                        
+                        const currentElement = letterContent.lastChild;
+                        
+                        if (currentCharIndex < currentPart.text.length) {
+                            currentElement.textContent += currentPart.text.charAt(currentCharIndex);
+                            currentCharIndex++;
+                            setTimeout(typeNextChar, 40);
+                        } else {
+                            // Pasar al siguiente párrafo
+                            currentPartIndex++;
+                            currentCharIndex = 0;
+                            setTimeout(typeNextChar, 150);
+                        }
+                    }
+                }
+                
+                typeNextChar();
+            }
+            
+            function displayFullMessage() {
+                letterContent.innerHTML = '';
+                
+                messageParts.forEach(part => {
+                    const element = document.createElement(part.type);
+                    element.textContent = part.text;
+                    if (part.class) {
+                        element.classList.add(part.class);
+                    }
+                    letterContent.appendChild(element);
+                });
+            }
+
+            // Optimización para touch devices
+            envelope.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
